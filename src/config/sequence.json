@@ -1,0 +1,65 @@
+{
+  "version": "muse5qne",
+  "source": {
+    "frames": 749,
+    "width": 1920,
+    "height": 1080
+  },
+  "desktop": {
+    "count": 375,
+    "folder": "/frames/desktop",
+    "step": 2,
+    "quality": 70,
+    "width": 1920,
+    "height": 1080,
+    "bytes": 23657258
+  },
+  "mobile": {
+    "count": 375,
+    "folder": "/frames/mobile",
+    "step": 2,
+    "quality": 70,
+    "width": 960,
+    "height": 540,
+    "bytes": 11206386
+  },
+  "pad": 4,
+  "pattern": "frame_{index}.webp",
+  "colors": {
+    "start": "#fefefe",
+    "endTop": "#f3d5b1",
+    "endBottom": "#314d52",
+    "endBorder": "#8d8c84"
+  },
+  "posterAt": 0.5,
+  "scenes": {
+    "fill": [
+      0,
+      0.17
+    ],
+    "zoomOutTruck": [
+      0.17,
+      0.27
+    ],
+    "crane": [
+      0.27,
+      0.37
+    ],
+    "shipLoad": [
+      0.37,
+      0.5
+    ],
+    "shipDepart": [
+      0.5,
+      0.63
+    ],
+    "whiteToOcean": [
+      0.63,
+      0.77
+    ],
+    "drone": [
+      0.77,
+      1
+    ]
+  }
+}

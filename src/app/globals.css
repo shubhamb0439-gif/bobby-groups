@@ -1,26 +1,117 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+@theme {
+  /* Brand */
+  --color-gold: #85704f;
+  --color-gold-dark: #6b5a3f;
+  --color-gold-light: #c4ab7f;
+  /* Spice highlights, used sparingly */
+  --color-saffron: #f4a300;
+  --color-chili: #b8321c;
+  --color-cardamom: #7fa14a;
+  --color-turmeric: #e8a317;
+  /* Neutrals */
+  --color-ink: #141210;
+  --color-paper: #ffffff;
+  --color-cream: #faf7f2;
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+  --font-heading: var(--font-montserrat), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+  --animate-scroll-cue: scroll-cue 1.8s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+  @keyframes scroll-cue {
+    0% { transform: translateY(-100%); }
+    100% { transform: translateY(200%); }
   }
 }
 
+html {
+  /* Top/bottom overscroll matches the black header and footer. */
+  background: #000;
+  -webkit-text-size-adjust: 100%;
+}
+
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  overflow-x: clip; /* clip (not hidden) keeps position: sticky working */
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Lenis */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis:not(.lenis-autoToggle).lenis-stopped {
+  overflow: clip;
+}
+.lenis [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+html.scroll-locked {
+  overflow: hidden;
+}
+
+/* Spice cursors (mouse/trackpad only): cardamom by default, chilli over anything clickable.
+   Native image cursors, so they never lag. Hotspot = the spice tip. */
+@media (hover: hover) and (pointer: fine) {
+  html {
+    cursor: url("/cursors/cardamom.png") 4 4, auto;
+    cursor: -webkit-image-set(url("/cursors/cardamom.png") 1x, url("/cursors/cardamom@2x.png") 2x) 4 4, auto;
+    cursor: image-set(url("/cursors/cardamom.png") 1x, url("/cursors/cardamom@2x.png") 2x) 4 4, auto;
+  }
+  :is(a, button, select, summary, label[for], [role="button"], [data-cursor]):not(:disabled) {
+    cursor: url("/cursors/chilli.png") 5 4, pointer;
+    cursor: -webkit-image-set(url("/cursors/chilli.png") 1x, url("/cursors/chilli@2x.png") 2x) 5 4, pointer;
+    cursor: image-set(url("/cursors/chilli.png") 1x, url("/cursors/chilli@2x.png") 2x) 5 4, pointer;
+  }
+  :is(input:not([type="checkbox"], [type="radio"], [type="submit"]), textarea, [contenteditable]) {
+    cursor: text;
+  }
+}
+
+/* Section backdrops: soft film grain + faint spice line-art. Static layers, no scroll cost. */
+.bg-grain {
+  background-image: url("/textures/grain.png");
+  background-size: 160px 160px;
+}
+.bg-spice-pattern {
+  background-image: url("/textures/spice-pattern.svg");
+  background-size: 320px 320px;
+}
+@media (max-width: 640px) {
+  .bg-spice-pattern {
+    background-size: 240px 240px;
+  }
+}
+
+/* Visible focus for keyboard users everywhere */
+:focus-visible {
+  outline: 2px solid var(--color-gold);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+header :focus-visible,
+footer :focus-visible,
+#mobile-menu :focus-visible {
+  outline-color: var(--color-gold-light);
+}
+
+::selection {
+  background: var(--color-gold);
+  color: #fff;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
