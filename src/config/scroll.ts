@@ -16,6 +16,12 @@ export const scrollConfig = {
   /** Parallel requests while loading. */
   concurrency: 6,
   /**
+   * Decoded (raw-pixel) frames kept in memory around the playhead. Everything else stays
+   * compressed. Mobile frames are ~2 MB decoded and desktop ~8 MB, so keep these small:
+   * phones kill tabs that hold too much image memory.
+   */
+  maxDecodedFrames: { desktop: 20, mobile: 16 },
+  /**
    * How a 16:9 frame fills a portrait (phone) screen.
    * 1 = pure cover (crops the sides heavily), 0 = contain (full frame, bands above/below).
    * Values in between zoom part-way; the bands blend into the sampled background colors.

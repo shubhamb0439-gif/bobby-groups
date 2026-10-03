@@ -32,7 +32,11 @@ export function ScrollSequence() {
       const section = sectionRef.current!;
       const stage = stageRef.current!;
       const canvas = canvasRef.current!;
-      const ctx = canvas.getContext("2d", { alpha: true })!;
+      // Touch devices (phones/tablets) get a CPU-backed canvas: a GPU canvas keeps a texture
+      // for every frame it has drawn, which exhausts mobile GPU memory and crashes the tab.
+      // Desktops keep the GPU canvas for the smoothest scrubbing.
+      const lowMemory = kind === "mobile" || window.matchMedia("(pointer: coarse)").matches;
+      const ctx = canvas.getContext("2d", { alpha: true, willReadFrequently: lowMemory })!;
       const set = getFrameSet(kind);
       const last = set.count - 1;
 
@@ -43,6 +47,7 @@ export function ScrollSequence() {
         priority: scrollConfig.preloadFrames,
         chunkSize: scrollConfig.chunkSize,
         concurrency: scrollConfig.concurrency,
+        maxDecoded: scrollConfig.maxDecodedFrames[kind],
         onPriorityProgress: (loaded, total) => loaderStore.set({ progress: loaded / total }),
         onPriorityDone: () => {
           loaderStore.set({ progress: 1, ready: true });
@@ -62,7 +67,7 @@ export function ScrollSequence() {
         if (canvas.width !== cw || canvas.height !== ch) {
           canvas.width = cw;
           canvas.height = ch;
-          ctx.imageSmoothingQuality = "high";
+          ctx.imageSmoothingQuality = lowMemory ? "medium" : "high";
         }
         // When the frame doesn't fill the height (portrait), feather its top/bottom edges
         // into the sampled background so there is never a hard line.
@@ -96,6 +101,7 @@ export function ScrollSequence() {
         const k = 1 - Math.pow(1 - scrollConfig.lerp, deltaTime / (1000 / 60));
         const diff = playhead.frame - current;
         current = Math.abs(diff) < 0.01 ? playhead.frame : current + diff * k;
+        store.focus(current);
         const frame = store.nearest(current);
         if (frame && (frame !== drawn || needsDraw)) {
           drawFrame(ctx, frame, cw, ch, scrollConfig.portraitFill);

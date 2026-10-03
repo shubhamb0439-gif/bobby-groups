@@ -69,6 +69,7 @@ The text panels and the white-to-ocean background blend follow these ranges auto
 | `pinVh.desktop` / `pinVh.mobile` | Scroll length of the video section in viewport heights (800 / 600) |
 | `lerp` | Playhead smoothing. Lower is silkier, higher is snappier. |
 | `preloadFrames` | Frames that must load before the preloader exits (40) |
+| `maxDecodedFrames` | Frames kept decoded around the playhead (desktop 20 / mobile 16). The rest stay compressed. Keep this small: decoding every frame uses hundreds of MB and makes phones crash the tab. |
 | `portraitFill` | How a 16:9 frame fills a phone screen. `1` = pure cover (crops the sides), `0` = whole frame. The default `0.6` zooms part-way and feathers the top and bottom edges into the background. |
 
 **Poster frame** (reduced motion and the Open Graph image): set `posterAt` (0–1) in `sequence.json`, then re-run `npm run frames`.
